@@ -59,8 +59,10 @@ function seleccionarOpcion(valor) {
 
     if (valor === "Instalacion") {
       texto = "Perfecto ✅ ¿Qué tipo de aire deseas instalar?";
+
     } else if (valor === "Reparacion") {
       texto = "Perfecto ✅ ¿Qué tipo de aire deseas reparar?";
+      
     } else if (valor === "Mantenimiento") {
       texto = "Perfecto ✅ ¿Qué tipo de aire deseas mantener?";
     }
