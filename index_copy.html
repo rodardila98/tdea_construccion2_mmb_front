@@ -12,6 +12,11 @@
   <!-- Tailwind -->
   <script src="https://cdn.tailwindcss.com"></script>
 
+  <script>
+    const estiloBoton =
+      "w-64 border border-gray-300 rounded-lg px-4 py-2 text-sm text-gray-700 hover:bg-green-100 hover:border-green-400 transition duration-200 shadow-sm";
+  </script>
+
   <!--Incono pestaña-->
   <link rel="icon" href="assets/img/icon.png" type="image/png"> <!--link etuqieta que conecta html
   con algo externo, en este caso la carpeta donde tenemos la imagen del icono, pero puede ser con
@@ -118,13 +123,36 @@
     <!--Se crean los botones en un contenedor con id="botonesChat" para poder desaparecerlos en js cuando 
     se le da clic en el chat-->
 
-    <!--Menú tipo de servicio-->
+
+    <!--Menú inicial-->
     <div id="menuInicial" class="hidden flex flex-col items-center mt-2 space-y-2">
+      <button onclick="seleccionarOpcion('Agendar')" class="estiloBoton">
+        Agendar
+      </button>
+
+      <button onclick="seleccionarOpcion('Consultar')" class="estiloBoton">
+        Consultar
+      </button>
+
+      <button onclick="seleccionarOpcion('Modificar')" class="estiloBoton">
+        Modificar
+      </button>
+
+      <button onclick="seleccionarOpcion('Cancelar')" class="estiloBoton">
+        Cancelar
+      </button>
 
       <script>
-        const estiloBoton =
-          "w-64 border border-gray-300 rounded-lg px-4 py-2 text-sm text-gray-700 hover:bg-green-100 hover:border-green-400 transition duration-200 shadow-sm";
+        // Aplicar el mismo estilo a los botones usando la variable
+        document.querySelectorAll('#menuInicial button').forEach(btn => {
+          btn.className = estiloBoton;
+        });
       </script>
+
+    </div>
+
+    <!--Menú tipo de servicio-->
+    <div id="menuTipoServicio" class="hidden flex flex-col items-center mt-2 space-y-2">
 
       <button onclick="seleccionarOpcion('Instalacion')" class="estiloBoton">
         Instalacion
@@ -140,7 +168,7 @@
 
       <script>
         // Aplicar el mismo estilo a los botones usando la variable
-        document.querySelectorAll('#menuInicial button').forEach(btn => {
+        document.querySelectorAll('#menuTipoServicio button').forEach(btn => {
           btn.className = estiloBoton;
         });
       </script>
@@ -171,8 +199,8 @@
     <!-- Enviar botón -->
     <div class="flex border-t">
       <input id="mensajeInput" class="w-full p-2 outline-none" placeholder="Escribe un mensaje..." /> <!--input: campo donde el usuario escribe con su debida class
-           id="mensajeInput" es el nombre que usa js para leer los mensajes. placeholder: es el mensaje que aparece cuando
-           el input está vacío, en este caso "escribe un mensaje"-->
+            id="mensajeInput" es el nombre que usa js para leer los mensajes. placeholder: es el mensaje que aparece cuando
+            el input está vacío, en este caso "escribe un mensaje"-->
       <button onclick="enviarMensaje()" class="bg-green-500 text-white px-4">
         <!-- este es el botón enviar que tiene su funcion en js-->
         Enviar

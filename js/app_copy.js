@@ -1,4 +1,5 @@
-let pasoAnterior = "tipoServicio";
+let pasoAnterior = "menuInicial";
+let opcionMenuPrincipal = "";
 
 //acá se definen todos los datos que se vayan a usar en los feth
 let datos = {
@@ -24,11 +25,13 @@ function abrirChat() {
 
     mensajes.innerHTML += `
       <div class="bg-gray-200 text-gray-800 px-4 py-2 rounded-lg">
-        <b>Mmb:</b> Hola 👋 ¿Que servicio buscas el día de hoy?
+        <b>MMB:</b> Hola 👋 ¿Qué deseas realizar el día de hoy con tu visita técnica?
       </div>
     `;
 
     mostrarMenu("menuInicial");
+
+    scrollChat();
   }
 }
 
@@ -65,6 +68,7 @@ function enviarMensaje() {
       </div>
     </div>
   `;
+  scrollChat();
 
   // PASO 3: SE CAPTURA SERIAL DEL EQUIPO
   if (pasoAnterior === "serial") {
@@ -75,7 +79,7 @@ function enviarMensaje() {
     // Se muestra texto pidiendo la marca
     mensajes.innerHTML += `
       <div class="bg-gray-200 text-gray-800 px-4 py-2 rounded-lg">
-        <b>Mmb:</b> Ingrese la marca de su equipo
+        <b>MMB:</b> Ingrese la marca de su equipo
       </div>
       `;
   }
@@ -88,10 +92,12 @@ function enviarMensaje() {
     // Se muestra texto pidiendo el modelo
     mensajes.innerHTML += `
       <div class="bg-gray-200 text-gray-800 px-4 py-2 rounded-lg">
-        <b>Mmb:</b> Ingrese el modelo de su equipo
+        <b>MMB:</b> Ingrese el modelo de su equipo
       </div>
       `;
+    scrollChat();
   }
+
 
   // PASO 4: SE CAPTURA MODELO DEL AIRE
   else if (pasoAnterior === "modelo") {
@@ -99,9 +105,8 @@ function enviarMensaje() {
     datos.modelo = valor;
     pasoAnterior = "finMenusEquipo";
 
+    scrollChat();
   }
-
-  scrollChat();
 
   if (pasoAnterior === "finMenusEquipo") {
 
@@ -174,49 +179,93 @@ function seleccionarOpcion(valor) {
     </div>
   `;
 
+  opcionMenuPrincipal = valor;
   // FLUJO PRINCIPAL
+  if (opcionMenuPrincipal === "Agendar") {
 
-  // PASO 1: SE CAPTURA TIPO DE SERVICIO 
-  if (pasoAnterior === "tipoServicio") {
+    // PASO 1: SE CAPTURA TIPO DE SERVICIO 
+    if (pasoAnterior === "menuInicial") {
 
-    datos.servicio = valor;
-    pasoAnterior = "tipoAire";
+      datos.servicio = valor;
+      pasoAnterior = "tipoServicio";
 
-    let texto = "";
+      let texto = "";
 
-    // Se despliega texto y menú según el servicio seleccionado
-    if (valor === "Instalacion") {
-      texto = "Perfecto ✅ ¿Qué tipo de aire deseas instalar?";
+      // Se despliega texto y menú según el servicio seleccionado
+      if (valor === "Instalacion") {
+        texto = "Perfecto ✅ ¿Qué tipo de aire deseas instalar?";
 
-    } else if (valor === "Reparacion") {
-      texto = "Perfecto ✅ ¿Qué tipo de aire deseas reparar?";
+      } else if (valor === "Reparacion") {
+        texto = "Perfecto ✅ ¿Qué tipo de aire deseas reparar?";
 
-    } else if (valor === "Mantenimiento") {
-      texto = "Perfecto ✅ ¿A qué tipo de aire deseas realizar mantenimiento?";
-    }
+      } else if (valor === "Mantenimiento") {
+        texto = "Perfecto ✅ ¿A qué tipo de aire deseas realizar mantenimiento?";
+      }
 
-    mensajes.innerHTML += `
+      mensajes.innerHTML += `
       <div class="bg-gray-200 text-gray-800 px-4 py-2 rounded-lg">
-        <b>Mmb:</b> ${texto}
+        <b>MMB:</b> ${texto}
       </div>
     `;
 
-    // Desplegar menú  de tipo de aire
-    mostrarMenu("menuTipoAire");
-  }
+      // Desplegar menú  de tipo de aire
+      mostrarMenu("menuTipoAire");
 
-  // PASO 2: SE CAPTURA TIPO DE AIRE
-  else if (pasoAnterior === "tipoAire") {
+      scrollChat();
+    }
 
-    datos.tipo = valor;
-    pasoAnterior = "serial";
 
-    // Se muestra texto pidiendo el serial
-    mensajes.innerHTML += `
+    // PASO 1: SE CAPTURA TIPO DE SERVICIO 
+    else if (pasoAnterior === "tipoServicio") {
+
+      datos.servicio = valor;
+      pasoAnterior = "tipoAire";
+
+      let texto = "";
+
+      /*     mensajes.innerHTML += `
+        <div class="bg-gray-200 text-gray-800 px-4 py-2 rounded-lg">
+          <b>Mmb:</b> Hola 👋 ¿Que servicio buscas el día de hoy?
+        </div>
+      `; */
+
+      // Se despliega texto y menú según el servicio seleccionado
+      if (valor === "Instalacion") {
+        texto = "Perfecto ✅ ¿Qué tipo de aire deseas instalar?";
+
+      } else if (valor === "Reparacion") {
+        texto = "Perfecto ✅ ¿Qué tipo de aire deseas reparar?";
+
+      } else if (valor === "Mantenimiento") {
+        texto = "Perfecto ✅ ¿A qué tipo de aire deseas realizar mantenimiento?";
+      }
+
+      mensajes.innerHTML += `
       <div class="bg-gray-200 text-gray-800 px-4 py-2 rounded-lg">
-        <b>Mmb:</b> Ingrese el serial de su equipo
+        <b>MMB:</b> ${texto}
+      </div>
+    `;
+
+      // Desplegar menú  de tipo de aire
+      mostrarMenu("menuTipoServicio");
+
+      scrollChat();
+    }
+
+    // PASO 2: SE CAPTURA TIPO DE AIRE
+    else if (pasoAnterior === "tipoAire") {
+
+      datos.tipo = valor;
+      pasoAnterior = "serial";
+
+      // Se muestra texto pidiendo el serial
+      mensajes.innerHTML += `
+      <div class="bg-gray-200 text-gray-800 px-4 py-2 rounded-lg">
+        <b>MMB:</b> Ingrese el serial de su equipo
       </div>
       `;
-  }
 
+      scrollChat();
+    }
+  }
 }
