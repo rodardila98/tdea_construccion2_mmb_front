@@ -9,6 +9,7 @@ let datos = {
   modelo: ""
 };
 
+
 // Abrir chat + iniciar flujo
 function abrirChat() {
 
@@ -22,24 +23,31 @@ function abrirChat() {
 
     mensajes.innerHTML += `
       <div class="bg-gray-200 text-gray-800 px-4 py-2 rounded-lg">
-        <b>Mmb:</b> Hola 👋 ¿Qué servicio deseas?
+        <b>Mmb:</b> Hola 👋 ¿Que servicio buscas el día de hoy?
       </div>
     `;
 
     mostrarMenu("menuInicial");
   }
 }
-// CLICK DE BOTONES
-function seleccionarOpcion(valor) {
 
-  const mensajes = document.getElementById("chatMensajes");
+  //Input serial, modelo, marca
+function enviarMensaje() {
+      let input = document.getElementById("mensajeInput"); //busca en mensajeInput en el html
+      let valor = input.value.trim();
 
-  // Eliminar menú activo
-  const menu = document.getElementById("menuActivo");
-  if (menu) menu.remove();
+      if (!valor) return;
 
-  // ✅ mensaje usuario (burbuja verde)
-  mensajes.innerHTML += `
+      const mensajes = document.getElementById("chatMensajes");
+
+      //Eliminar input activo
+      const inputBox = document.getElementById("mensajeInput");
+      if (inputBox){ 
+        inputBox.value = "";
+      }
+
+      //burbuja verde
+      mensajes.innerHTML += `
     <div class="flex justify-end mb-2">
       <div class="bg-green-400 text-white px-4 py-2 rounded-lg">
         ${valor}
@@ -47,47 +55,7 @@ function seleccionarOpcion(valor) {
     </div>
   `;
 
-  // ✅ FLUJO PRINCIPAL
-
-  // ---- PASO 1: TIPO DE SERVICIO ----
-  if (paso === "inicio") {
-
-    datos.servicio = valor;
-    paso = "tipoAire";
-
-    let texto = "";
-
-    if (valor === "Instalacion") {
-      texto = "Perfecto ✅ ¿Qué tipo de aire deseas instalar?";
-
-    } else if (valor === "Reparacion") {
-      texto = "Perfecto ✅ ¿Qué tipo de aire deseas reparar?";
-      
-    } else if (valor === "Mantenimiento") {
-      texto = "Perfecto ✅ ¿Qué tipo de aire deseas mantener?";
-    }
-
-    mensajes.innerHTML += `
-      <div class="bg-gray-200 text-gray-800 px-4 py-2 rounded-lg">
-        <b>Mmb:</b> ${texto}
-      </div>
-    `;
-
-    mostrarMenu("menuTipoAire");
-  }
-
-
-  // ---- PASO 2: TIPO DE AIRE ----
-  else if (paso === "tipoAire") {
-
-    datos.tipo = valor;
-    paso = "serial";
-    mensajes.innerHTML += `
-      <div class="bg-gray-200 text-gray-800 px-4 py-2 rounded-lg">
-        <b>Mmb:</b> Ingrese el serial de su equipo
-      </div>`;
-
-  } else if (paso === "serial") {
+  if (paso === "serial") {
     datos.serial = mensaje;
     paso = "modelo";
     mensajes.innerHTML += `
@@ -136,15 +104,7 @@ function seleccionarOpcion(valor) {
   }
 }
 
-//ORGANIZAR BOTÓN 
-function enviarMensaje() {
-      const input = document.getElementById("mensajeInput"); //busca en mensajeInput en el html
-      const mensajes = document.getElementById("chatMensajes"); //busca el chatMensajes en el html
-      let mensaje = input.value.toLowerCase();  
-      if (mensaje.trim()=="") return;
-    }
-
-// ✅ mostrar menú dinámico
+//mostrar menú dinámico
 function mostrarMenu(idMenu) {
 
   const mensajes = document.getElementById("chatMensajes");
@@ -158,6 +118,73 @@ function mostrarMenu(idMenu) {
   `;
 }
 
+// CLICK DE BOTONES
+function seleccionarOpcion(valor) {
+
+  const mensajes = document.getElementById("chatMensajes");
+
+  // Eliminar menú activo
+  const menu = document.getElementById("menuActivo");
+  if (menu) menu.remove();
+
+  // mensaje usuario (burbuja verde)
+  mensajes.innerHTML += `
+    <div class="flex justify-end mb-2">
+      <div class="bg-green-400 text-white px-4 py-2 rounded-lg">
+        ${valor}
+      </div>
+    </div>
+  `;
+
+  //FLUJO PRINCIPAL
+
+  //PASO 1: TIPO DE SERVICIO 
+  if (paso === "inicio") {
+
+    datos.servicio = valor;
+    paso = "tipoAire";
+
+    let texto = "";
+
+    if (valor === "Instalacion") {
+      texto = "Perfecto ✅ ¿Qué tipo de aire deseas instalar?";
+
+    } else if (valor === "Reparacion") {
+      texto = "Perfecto ✅ ¿Qué tipo de aire deseas reparar?";
+      
+    } else if (valor === "Mantenimiento") {
+      texto = "Perfecto ✅ ¿Qué tipo de aire deseas mantener?";
+    }
+
+    mensajes.innerHTML += `
+      <div class="bg-gray-200 text-gray-800 px-4 py-2 rounded-lg">
+        <b>Mmb:</b> ${texto}
+      </div>
+    `;
+
+    mostrarMenu("menuTipoAire");
+  }
+
+
+  // ---- PASO 2: TIPO DE AIRE ----
+  else if (paso === "tipoAire") {
+
+    datos.tipo = valor;
+    paso = "serial";
+
+    mensajes.innerHTML += `
+      <div class="bg-gray-200 text-gray-800 px-4 py-2 rounded-lg">
+        <b>Mmb:</b> Ingrese el serial de su equipo
+      </div>
+      `;
+    mostrarInput("serial");
+  }
+
+  scrollChat();
+
+
+
+
 
 // ✅ scroll automático
 function scrollChat() {
@@ -168,4 +195,4 @@ function scrollChat() {
     mensajes.scrollTop = mensajes.scrollHeight;
   }, 50);
 }
-``
+}
