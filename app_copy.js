@@ -1,8 +1,8 @@
 let paso = "inicio";
 
 let datos = {
-  servicio: "",
-  tipo: ""
+  servicio:"",
+  tipo:""
 };
 
 // ✅ abrir chat + iniciar flujo
@@ -72,9 +72,8 @@ function seleccionarOpcion(valor) {
     mostrarMenu("menuTipoAire");
   }
 
-
   // ---- PASO 2: TIPO DE AIRE ----
-    else if (paso === "tipoAire") {
+  else if (paso === "tipoAire") {
 
     datos.tipo = valor;
     paso = "serial";
