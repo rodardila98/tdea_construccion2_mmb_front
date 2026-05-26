@@ -1,4 +1,4 @@
-let paso = "inicio";
+let pasoAnterior = "tipoServicio";
 
 //acá se definen todos los datos que se vayan a usar en los feth
 let datos = {
@@ -18,6 +18,7 @@ function abrirChat() {
 
   chat.classList.toggle("hidden");
 
+
   // SOLO iniciar una vez
   if (mensajes.innerHTML.trim() === "") {
 
@@ -31,23 +32,33 @@ function abrirChat() {
   }
 }
 
-  //Input serial, modelo, marca
+// Scroll automático
+function scrollChat() {
+
+  const mensajes = document.getElementById("chatMensajes");
+
+  setTimeout(() => {
+    mensajes.scrollTop = mensajes.scrollHeight;
+  }, 50);
+}
+
+// Input serial, modelo, marca
 function enviarMensaje() {
-      let input = document.getElementById("mensajeInput"); //busca en mensajeInput en el html
-      let valor = input.value.trim();
+  let input = document.getElementById("mensajeInput"); //busca en mensajeInput en el html
+  let valor = input.value.trim();
 
-      if (!valor) return;
+  if (!valor) return;
 
-      const mensajes = document.getElementById("chatMensajes");
+  const mensajes = document.getElementById("chatMensajes");
 
-      //Eliminar input activo
-      const inputBox = document.getElementById("mensajeInput");
-      if (inputBox){ 
-        inputBox.value = "";
-      }
+  // Eliminar input activo
+  const inputBox = document.getElementById("mensajeInput");
+  if (inputBox) {
+    inputBox.value = "";
+  }
 
-      //burbuja verde
-      mensajes.innerHTML += `
+  // Burbuja verde
+  mensajes.innerHTML += `
     <div class="flex justify-end mb-2">
       <div class="bg-green-400 text-white px-4 py-2 rounded-lg">
         ${valor}
@@ -55,32 +66,57 @@ function enviarMensaje() {
     </div>
   `;
 
-  if (paso === "serial") {
+  // PASO 3: SE CAPTURA SERIAL DEL EQUIPO
+  if (pasoAnterior === "serial") {
+
     datos.serial = valor;
-    paso = "modelo";
+    pasoAnterior = "marca";
+
+    // Se muestra texto pidiendo la marca
+    mensajes.innerHTML += `
+      <div class="bg-gray-200 text-gray-800 px-4 py-2 rounded-lg">
+        <b>Mmb:</b> Ingrese la marca de su equipo
+      </div>
+      `;
+  }
+  // PASO 3: SE CAPTURA MARCA DEL AIRE
+  else if (pasoAnterior === "marca") {
+
+    datos.marca = valor;
+    pasoAnterior = "modelo";
+
+    // Se muestra texto pidiendo el modelo
     mensajes.innerHTML += `
       <div class="bg-gray-200 text-gray-800 px-4 py-2 rounded-lg">
         <b>Mmb:</b> Ingrese el modelo de su equipo
-      </div>`;
+      </div>
+      `;
+  }
 
-  } else if (paso === "modelo") {
-    datos.modelo = mensaje;
-    paso = "final"
+  // PASO 4: SE CAPTURA MODELO DEL AIRE
+  else if (pasoAnterior === "modelo") {
 
+    datos.modelo = valor;
+    pasoAnterior = "finMenusEquipo";
+
+  }
+
+  scrollChat();
+
+  if (pasoAnterior === "finMenusEquipo") {
 
     fetch("http://localhost:8080/api/equipos", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
+        servicio: datos.servicio,
+        tipo: datos.tipo,
         serial: datos.serial,
         marca: datos.marca,
         modelo: datos.modelo,
-        tipo: valor,
-        usuario: "12"
+        usuario: "123"
       })
-    })
-
-      .then(response => response.json())
+    }).then(response => response.json())
       .then(data => {
         console.log("✅ Backend OK:", data);
       })
@@ -94,6 +130,7 @@ function enviarMensaje() {
           Servicio: ${datos.servicio}<br>
           Tipo: ${datos.tipo}<br>
           Serial: ${datos.serial}<br>
+          Marca: ${datos.marca}<br>
           Modelo: ${datos.modelo}
         </div>
       `;
@@ -104,7 +141,8 @@ function enviarMensaje() {
   }
 }
 
-//mostrar menú dinámico
+
+// Mostrar menú dinámico (los botones)
 function mostrarMenu(idMenu) {
 
   const mensajes = document.getElementById("chatMensajes");
@@ -136,22 +174,23 @@ function seleccionarOpcion(valor) {
     </div>
   `;
 
-  //FLUJO PRINCIPAL
+  // FLUJO PRINCIPAL
 
-  //PASO 1: TIPO DE SERVICIO 
-  if (paso === "inicio") {
+  // PASO 1: SE CAPTURA TIPO DE SERVICIO 
+  if (pasoAnterior === "tipoServicio") {
 
     datos.servicio = valor;
-    paso = "tipoAire";
+    pasoAnterior = "tipoAire";
 
     let texto = "";
 
+    // Se despliega texto y menú según el servicio seleccionado
     if (valor === "Instalacion") {
       texto = "Perfecto ✅ ¿Qué tipo de aire deseas instalar?";
 
     } else if (valor === "Reparacion") {
       texto = "Perfecto ✅ ¿Qué tipo de aire deseas reparar?";
-      
+
     } else if (valor === "Mantenimiento") {
       texto = "Perfecto ✅ ¿A qué tipo de aire deseas realizar mantenimiento?";
     }
@@ -162,37 +201,22 @@ function seleccionarOpcion(valor) {
       </div>
     `;
 
+    // Desplegar menú  de tipo de aire
     mostrarMenu("menuTipoAire");
   }
 
-
-  // ---- PASO 2: TIPO DE AIRE ----
-  else if (paso === "tipoAire") {
+  // PASO 2: SE CAPTURA TIPO DE AIRE
+  else if (pasoAnterior === "tipoAire") {
 
     datos.tipo = valor;
-    paso = "serial";
+    pasoAnterior = "serial";
 
+    // Se muestra texto pidiendo el serial
     mensajes.innerHTML += `
       <div class="bg-gray-200 text-gray-800 px-4 py-2 rounded-lg">
         <b>Mmb:</b> Ingrese el serial de su equipo
       </div>
       `;
-    mostrarInput("serial");
   }
 
-  scrollChat();
-
-
-
-
-
-// ✅ scroll automático
-function scrollChat() {
-
-  const mensajes = document.getElementById("chatMensajes");
-
-  setTimeout(() => {
-    mensajes.scrollTop = mensajes.scrollHeight;
-  }, 50);
-}
 }
