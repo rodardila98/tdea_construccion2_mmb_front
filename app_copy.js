@@ -9,7 +9,7 @@ let datos = {
   modelo: ""
 };
 
-// ✅ abrir chat + iniciar flujo
+// Abrir chat + iniciar flujo
 function abrirChat() {
 
   const chat = document.getElementById("chatBox");
@@ -17,7 +17,7 @@ function abrirChat() {
 
   chat.classList.toggle("hidden");
 
-  // ✅ SOLO iniciar una vez
+  // SOLO iniciar una vez
   if (mensajes.innerHTML.trim() === "") {
 
     mensajes.innerHTML += `
@@ -29,14 +29,12 @@ function abrirChat() {
     mostrarMenu("menuInicial");
   }
 }
-
-
-// ✅ CLICK DE BOTONES
+// CLICK DE BOTONES
 function seleccionarOpcion(valor) {
 
   const mensajes = document.getElementById("chatMensajes");
 
-  // ✅ eliminar menú activo
+  // Eliminar menú activo
   const menu = document.getElementById("menuActivo");
   if (menu) menu.remove();
 
@@ -78,48 +76,48 @@ function seleccionarOpcion(valor) {
 
 
   // ---- PASO 2: TIPO DE AIRE ----
-    else if (paso === "tipoAire") {
+  else if (paso === "tipoAire") {
 
     datos.tipo = valor;
     paso = "serial";
-      mensajes.innerHTML += `
+    mensajes.innerHTML += `
       <div class="bg-gray-200 text-gray-800 px-4 py-2 rounded-lg">
         <b>Mmb:</b> Ingrese el serial de su equipo
       </div>`;
 
-    }else if (paso === "serial"){
-      datos.serial = mensaje;
-      paso = "modelo";
-      mensajes.innerHTML += `
+  } else if (paso === "serial") {
+    datos.serial = mensaje;
+    paso = "modelo";
+    mensajes.innerHTML += `
       <div class="bg-gray-200 text-gray-800 px-4 py-2 rounded-lg">
         <b>Mmb:</b> Ingrese el modelo de su equipo
       </div>`;
 
-    }else if (paso === "modelo")
-      datos.modelo = mensaje; 
-      paso = "final"
+  } else if (paso === "modelo") {
+    datos.modelo = mensaje;
+    paso = "final"
 
-    fetch ("http://localhost:8080/api/equipos", {
-          method: "POST",
-           headers: {"Content-Type": "application/json"},
-           body: JSON.stringify({
-          serial: datos.serial,
-          marca: datos.marca,
-          modelo: datos.modelo,
-          tipo: valor,
-          usuario: "12"
-         })
-        })
-        
-        .then(response => response.json())
-          .then(data => {
-            console.log("✅ Backend OK:", data);
-          })
-          .catch(error => {
-            console.error("❌ Error:", error);
-          });
 
-          
+    fetch("http://localhost:8080/api/equipos", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        serial: datos.serial,
+        marca: datos.marca,
+        modelo: datos.modelo,
+        tipo: valor,
+        usuario: "12"
+      })
+    })
+
+      .then(response => response.json())
+      .then(data => {
+        console.log("✅ Backend OK:", data);
+      })
+      .catch(error => {
+        console.error("❌ Error:", error);
+      });
+
     mensajes.innerHTML += `
         <div class="bg-gray-200 text-gray-800 px-4 py-2 rounded-lg">
           ✅ Listo, registré tu solicitud:<br><br>
@@ -130,26 +128,11 @@ function seleccionarOpcion(valor) {
         </div>
       `;
 
-      console.log("DATOS FINALES:", datos);
-
-      scrollChat();
-    }
-    ``
-
-    mensajes.innerHTML += `
-      <div class="bg-gray-200 text-gray-800 px-4 py-2 rounded-lg">
-        ✅ Listo, registré tu solicitud:<br><br>
-        Servicio: ${datos.servicio}<br>
-        Tipo: ${datos.tipo}
-      </div>
-    `;
-
     console.log("DATOS FINALES:", datos);
+
+    scrollChat();
   }
-
-  scrollChat();
 }
-
 
 // ✅ mostrar menú dinámico
 function mostrarMenu(idMenu) {
