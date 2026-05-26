@@ -140,7 +140,9 @@ function seleccionarOpcion(valor) {
 function enviarMensaje() {
       const input = document.getElementById("mensajeInput"); //busca en mensajeInput en el html
       const mensajes = document.getElementById("chatMensajes"); //busca el chatMensajes en el html
-      }
+      let mensaje = input.value.toLowerCase();  
+      if (mensaje.trim()=="") return;
+    }
 
 // ✅ mostrar menú dinámico
 function mostrarMenu(idMenu) {
