@@ -56,7 +56,7 @@ function enviarMensaje() {
   `;
 
   if (paso === "serial") {
-    datos.serial = mensaje;
+    datos.serial = valor;
     paso = "modelo";
     mensajes.innerHTML += `
       <div class="bg-gray-200 text-gray-800 px-4 py-2 rounded-lg">
@@ -153,7 +153,7 @@ function seleccionarOpcion(valor) {
       texto = "Perfecto ✅ ¿Qué tipo de aire deseas reparar?";
       
     } else if (valor === "Mantenimiento") {
-      texto = "Perfecto ✅ ¿Qué tipo de aire deseas mantener?";
+      texto = "Perfecto ✅ ¿A qué tipo de aire deseas realizar mantenimiento?";
     }
 
     mensajes.innerHTML += `
