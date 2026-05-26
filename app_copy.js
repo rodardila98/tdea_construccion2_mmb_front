@@ -1,8 +1,12 @@
 let paso = "inicio";
 
+//acá se definen todos los datos que se vayan a usar en los feth
 let datos = {
-  servicio:"",
-  tipo:""
+  servicio: "",
+  tipo: "",
+  serial: "",
+  marca: "",
+  modelo: ""
 };
 
 // ✅ abrir chat + iniciar flujo
@@ -72,8 +76,9 @@ function seleccionarOpcion(valor) {
     mostrarMenu("menuTipoAire");
   }
 
+
   // ---- PASO 2: TIPO DE AIRE ----
-  else if (paso === "tipoAire") {
+    else if (paso === "tipoAire") {
 
     datos.tipo = valor;
     paso = "serial";
