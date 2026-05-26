@@ -161,8 +161,76 @@ function mostrarMenu(idMenu) {
   `;
 }
 
+function menuAgendar(mensajes) {
+
+  // SE INICIA RUTA DE AGENDAMIENTO
+  if (pasoAnterior === "menuInicial") {
+
+    pasoAnterior = "tipoServicio";
+
+    mensajes.innerHTML += `
+      <div class="bg-gray-200 text-gray-800 px-4 py-2 rounded-lg">
+        <b>Mmb:</b> Hola 👋 ¿Que servicio buscas el día de hoy?
+      </div>
+    `;
+
+    // Desplegar menú  de tipo de servicio
+    mostrarMenu("menuTipoServicio");
+
+    scrollChat();
+  }
+
+  // PASO 1: SE CAPTURA TIPO DE SERVICIO 
+  else if (pasoAnterior === "tipoServicio") {
+
+    datos.servicio = valor;
+    pasoAnterior = "tipoAire";
+
+    let texto = "";
+
+    // Se despliega texto y menú según el servicio seleccionado
+    if (valor === "Instalacion") {
+      texto = "Perfecto ✅ ¿Qué tipo de aire deseas instalar?";
+
+    } else if (valor === "Reparacion") {
+      texto = "Perfecto ✅ ¿Qué tipo de aire deseas reparar?";
+
+    } else if (valor === "Mantenimiento") {
+      texto = "Perfecto ✅ ¿A qué tipo de aire deseas realizar mantenimiento?";
+    }
+
+    mensajes.innerHTML += `
+      <div class="bg-gray-200 text-gray-800 px-4 py-2 rounded-lg">
+        <b>MMB:</b> ${texto}
+      </div>
+    `;
+
+    // Desplegar menú  de tipo de aire
+    mostrarMenu("menuTipoAire");
+
+    scrollChat();
+  }
+
+  // PASO 2: SE CAPTURA TIPO DE AIRE
+  else if (pasoAnterior === "tipoAire") {
+
+    datos.tipo = valor;
+    pasoAnterior = "serial";
+
+    // Se muestra texto pidiendo el serial
+    mensajes.innerHTML += `
+      <div class="bg-gray-200 text-gray-800 px-4 py-2 rounded-lg">
+        <b>MMB:</b> Ingrese el serial de su equipo
+      </div>
+      `;
+
+    scrollChat();
+
+  }
+}
+
 // CLICK DE BOTONES
-function seleccionarOpcion(valor) {
+function seleccionarOpcion(opcionMenu, valor) {
 
   const mensajes = document.getElementById("chatMensajes");
 
@@ -179,93 +247,12 @@ function seleccionarOpcion(valor) {
     </div>
   `;
 
-  opcionMenuPrincipal = valor;
+  opcionMenuPrincipal = opcionMenu;
+
   // FLUJO PRINCIPAL
   if (opcionMenuPrincipal === "Agendar") {
 
-    // PASO 1: SE CAPTURA TIPO DE SERVICIO 
-    if (pasoAnterior === "menuInicial") {
+    menuAgendar(mensajes);
 
-      datos.servicio = valor;
-      pasoAnterior = "tipoServicio";
-
-      let texto = "";
-
-      // Se despliega texto y menú según el servicio seleccionado
-      if (valor === "Instalacion") {
-        texto = "Perfecto ✅ ¿Qué tipo de aire deseas instalar?";
-
-      } else if (valor === "Reparacion") {
-        texto = "Perfecto ✅ ¿Qué tipo de aire deseas reparar?";
-
-      } else if (valor === "Mantenimiento") {
-        texto = "Perfecto ✅ ¿A qué tipo de aire deseas realizar mantenimiento?";
-      }
-
-      mensajes.innerHTML += `
-      <div class="bg-gray-200 text-gray-800 px-4 py-2 rounded-lg">
-        <b>MMB:</b> ${texto}
-      </div>
-    `;
-
-      // Desplegar menú  de tipo de aire
-      mostrarMenu("menuTipoAire");
-
-      scrollChat();
-    }
-
-
-    // PASO 1: SE CAPTURA TIPO DE SERVICIO 
-    else if (pasoAnterior === "tipoServicio") {
-
-      datos.servicio = valor;
-      pasoAnterior = "tipoAire";
-
-      let texto = "";
-
-      /*     mensajes.innerHTML += `
-        <div class="bg-gray-200 text-gray-800 px-4 py-2 rounded-lg">
-          <b>Mmb:</b> Hola 👋 ¿Que servicio buscas el día de hoy?
-        </div>
-      `; */
-
-      // Se despliega texto y menú según el servicio seleccionado
-      if (valor === "Instalacion") {
-        texto = "Perfecto ✅ ¿Qué tipo de aire deseas instalar?";
-
-      } else if (valor === "Reparacion") {
-        texto = "Perfecto ✅ ¿Qué tipo de aire deseas reparar?";
-
-      } else if (valor === "Mantenimiento") {
-        texto = "Perfecto ✅ ¿A qué tipo de aire deseas realizar mantenimiento?";
-      }
-
-      mensajes.innerHTML += `
-      <div class="bg-gray-200 text-gray-800 px-4 py-2 rounded-lg">
-        <b>MMB:</b> ${texto}
-      </div>
-    `;
-
-      // Desplegar menú  de tipo de aire
-      mostrarMenu("menuTipoServicio");
-
-      scrollChat();
-    }
-
-    // PASO 2: SE CAPTURA TIPO DE AIRE
-    else if (pasoAnterior === "tipoAire") {
-
-      datos.tipo = valor;
-      pasoAnterior = "serial";
-
-      // Se muestra texto pidiendo el serial
-      mensajes.innerHTML += `
-      <div class="bg-gray-200 text-gray-800 px-4 py-2 rounded-lg">
-        <b>MMB:</b> Ingrese el serial de su equipo
-      </div>
-      `;
-
-      scrollChat();
-    }
   }
 }
